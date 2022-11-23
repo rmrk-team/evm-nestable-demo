@@ -1,13 +1,10 @@
-# Sample Hardhat Project
+# EVM Nestable Demo 
+## A contextualized user journey to explore and understand the Nestable NFT features
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+Nestable is a Solidity smart contract implementation by [RMRK Team](https://github.com/rmrk-team) that allows an NFT to own another NFT.
 
-Try running some of the following tasks:
+## Context
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
+We are in the Medieval epoch and in the universe there is a Wizard who can do whatever he wants.
+During a special day the wizard decided to give life to 2 kings, each one with his own Kingdom and then he allowed the kings to model their kingdoms.
+What happened after is discoverable following the user journey, so have fun and happy learning!
