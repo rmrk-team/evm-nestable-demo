@@ -1,10 +1,13 @@
 {
-  "name": "hardhat-project",
+  "name": "nested-evm-demo",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.0",
     "hardhat": "^2.12.2"
   },
   "dependencies": {
     "@rmrk-team/evm-contracts": "^0.17.0"
+  },
+  "scripts": {
+    "kingdom": "hardhat run scripts/kingdomUserJourney.ts"
   }
 }
