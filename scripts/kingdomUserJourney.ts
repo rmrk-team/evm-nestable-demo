@@ -2,17 +2,12 @@ import { ethers } from "hardhat";
 import { Kingdom } from "../typechain-types";
 import { Army } from "../typechain-types";
 import { Soldier } from "../typechain-types";
-import { BattleField } from "../typechain-types";
 
 async function main() {
 
-    const totalSoldierTokens = 90;
-    const totalArmyTokens = 5;
-    const totalKingdomTokens = 2;
-
-    const MAX_SOLDIER_TOKENS = totalSoldierTokens;
-    const MAX_ARMY_TOKENS = MAX_SOLDIER_TOKENS + totalArmyTokens;
-    const MAX_KINGDOM_TOKENS = MAX_ARMY_TOKENS + totalKingdomTokens;
+    const MAX_KINGDOM_TOKENS = 2;
+    const MAX_ARMY_TOKENS = 5;
+    const MAX_SOLDIER_TOKENS = 90;
 
     const pricePerKingdom = ethers.utils.parseEther("1");
     const pricePerArmy = ethers.utils.parseEther("0.1");
@@ -71,7 +66,7 @@ async function main() {
     await kingdomSCInstance.deployed();
     console.log("Deployed!");
 
-    // Minting Kingdom NFTs directly to kings addresses
+    // Minting Kingdom NFTs directly to kings addresses - Multi-level hierarchy creation
     console.log("Minting Kingdom NFTs, 1 per king. They are the top level hierarchy tokens.");
     let firstKingdomCreationTx = await kingdomSCInstance.mint(KING_ONE.address, 1, { value: pricePerKingdom });
     await firstKingdomCreationTx.wait();
@@ -91,8 +86,7 @@ async function main() {
     const FIRST_KINGDOM_ID = 1;
     const SECOND_KINGDOM_ID = 2;
 
-    let firstArmyTx = await armySCInstance.nestMint(kingdomSCInstance.address, FIRST_KINGDOM_ARMIES, FIRST_KINGDOM_ID, {
-        value: pricePerArmy.mul(FIRST_KINGDOM_ARMIES)
+    let firstArmyTx = await armySCInstance.nestMint(kingdomSCInstance.address, FIRST_KINGDOM_ARMIES, FIRST_KINGDOM_ID, { value: pricePerArmy.mul(FIRST_KINGDOM_ARMIES) 
     });
     await firstArmyTx.wait();
     let secondArmyTx = await armySCInstance.nestMint(kingdomSCInstance.address, SECOND_KINGDOM_ARMIES, SECOND_KINGDOM_ID, {
@@ -119,7 +113,7 @@ async function main() {
     console.log("The king %s of the second Kingdom has accepted %d armies!", KING_TWO.address, SECOND_KINGDOM_ARMIES);
 
     // Mint soldiers
-    await soldierSCInstance.connect(owner).mint(owner.address, totalSoldierTokens, { value: pricePerSoldier.mul(totalSoldierTokens) });
+    await soldierSCInstance.connect(WIZARD).mint(WIZARD.address, MAX_SOLDIER_TOKENS, { value: pricePerSoldier.mul(MAX_SOLDIER_TOKENS) });
 
     // Distribution of soldiers between the 5 armies
     const soldiersDistribution = [10, 20, 30, 14, 16];
@@ -147,12 +141,9 @@ async function main() {
 
     console.log("...\n...\n...\nThe kings, after a small meditation have accepted to form in this way their armies.");
 
-    // Accept first army soldiers
+    // Accept the soldiers in the armies
     for (let j = 0; j < armiesComposition.length; j++) {
         for (let i = soldiersDistribution[j] - 1; i >= 0; i--) {
-            //const position = i;
-            //const tokenId = armiesComposition[j][i][0];
-            //console.log("Position %d, tokenID %d", position, tokenId);
             if (j < 3) {
                 await armySCInstance.connect(KING_ONE).acceptChild(j + 1, i, soldierSCInstance.address, armiesComposition[j][i][0]);
             } else {
@@ -169,37 +160,39 @@ async function main() {
         console.log("The army %d has been composed by %d soldiers!", i + 1, armiesComposition[i]);
     }
 
-    console.log("Now each king has his armies and every army has its soldiers.");
+    console.log("Now each king has his armies and every army has its soldiers.\n\n");
+    
+    // Function to print a Kingdom hierarchy
+    async function printKingdom(kingdomId: number): Promise<string> {
 
-    console.log("We will now explore what the Second King owns and how its Kingdom is structured");
-    // Checking second kingdom hierarchy
-    let x = await kingdomSCInstance.connect(KING_TWO).ownerOf(SECOND_KINGDOM_ID);
-    let ownerArmies = await kingdomSCInstance.childrenOf(SECOND_KINGDOM_ID);
-    console.log("Second King address: %s", KING_TWO.address);
-    console.log("The Kingdom with token ID %s is owned by %s (second King).", SECOND_KINGDOM_ID, x);
-    console.log("The Kingdom with ID %d owns %d armies. Their (token) ID are %d and %d",
-        SECOND_KINGDOM_ID, ownerArmies.length, ownerArmies[0][0], ownerArmies[1][0]);
-    let army1Soldiers = await armySCInstance.childrenOf(ownerArmies[0][0]);
-    let army2Soldiers = await armySCInstance.childrenOf(ownerArmies[1][0]);
-
-    var soldierIDs = [];
-    for (let i = 0; i < army1Soldiers.length; i++) {
-        soldierIDs.push(army1Soldiers[i][0]);
+        const king = await kingdomSCInstance.ownerOf(kingdomId);
+        const armies = await kingdomSCInstance.childrenOf(kingdomId);
+        console.log("\nKingdom with NFT ID %d is owned by the King %s and it owns %d Army NFTs:\n", kingdomId, king, armies.length);
+        for (let i = 0; i < armies.length; i++) {
+            const currentArmyId = armies[i][0];
+            const soldiers = await armySCInstance.childrenOf(currentArmyId);
+            console.log("\   |----Army with NFT ID %d owns %d Soldier NFTs:\n", currentArmyId, soldiers.length);
+            for (let j = 0; j < soldiers.length; j++) {
+                const currentSoldierId = soldiers[j][0];
+                console.log("\t\|----Soldier with NFT ID %d", currentSoldierId);
+                if (j == soldiers.length - 1) {
+                    console.log("");
+                }
+            }
+        }
+        return "";
     }
-    console.log("The army with ID %d is composed by the soldiers with ID: %s", ownerArmies[0][0], soldierIDs);
-    soldierIDs = [];    // Reset array content
-    for (let i = 0; i < army2Soldiers.length; i++) {
-        soldierIDs.push(army2Soldiers[i][0]);
-    }
-    console.log("The army with ID %d is composed by the soldiers with ID: %s", ownerArmies[1][0], soldierIDs);
 
-    console.log("\nStarting from the top we have explored the hierarchy of the Second Kingdom where the root owner is %s", KING_TWO.address);
+    console.log("Kingdom %d hierarchy:", FIRST_KINGDOM_ID);
+    await printKingdom(FIRST_KINGDOM_ID);
 
-    // Hierarchies transfer 
+    // Transfer NFTs inside and outside the hierarchy ---
     const biggerArmyId = 3;
     const smallerArmyId = 1;
     const bigArmy = await armySCInstance.childrenOf(biggerArmyId);
-    console.log("Army soldiers now: %d", bigArmy.length);
+    console.log("Bigger army soldiers amount now: %d", bigArmy.length);
+    const smallerArmy = await armySCInstance.childrenOf(smallerArmyId);
+    console.log("Smaller army soldiers amount now: %d", smallerArmy.length);
 
     for (let i = 0; i < 5; i++) {
         let soldierToRemoveIndex = bigArmy.length - 1 - i;    // we procede from last one back to the first one
@@ -232,7 +225,7 @@ async function main() {
         console.log("Army %d: %d soldiers", i + 1, (await armySCInstance.childrenOf(i + 1)).length);
     }
 
-    // Burn an Army
+    // Burn a soldier -- Burn different parts of the hierarchy
     const secondArmyId = 2;
     let secondArmySoldiers = await armySCInstance.childrenOf(secondArmyId);
     console.log("Army owner: %s, army direct owner: %s", await armySCInstance.ownerOf(secondArmyId), await armySCInstance.directOwnerOf(secondArmyId));
@@ -272,33 +265,6 @@ async function main() {
     // Burn army with children (Soldier NFTs)
     await armySCInstance.connect(KING_ONE)["burn(uint256,uint256)"](secondArmyId, secondArmySoldiers.length);
     console.log("Army of %s: %d", KING_ONE.address, await armySCInstance.balanceOf(KING_ONE.address));
-
-    console.log("Smart contract addresses -->\n%s\n%s\n%s", kingdomSCInstance.address, armySCInstance.address, soldierSCInstance.address);
-
-
-    // Function to explore a Kingdom hierarchy
-    async function printKingdom(kingdomId: number): Promise<string> {
-
-        const king = await kingdomSCInstance.ownerOf(kingdomId);
-        const armies = await kingdomSCInstance.childrenOf(kingdomId);
-        console.log("\nKingdom with NFT ID %d is owned by the King %s and it owns %d Army NFTs:\n", kingdomId, king, armies.length);
-        for (let i = 0; i < armies.length; i++) {
-            const currentArmyId = armies[i][0];
-            const soldiers = await armySCInstance.childrenOf(currentArmyId);
-            console.log("\   |----Army with NFT ID %d owns %d Soldier NFTs:\n", currentArmyId, soldiers.length);
-            for (let j = 0; j < soldiers.length; j++) {
-                const currentSoldierId = soldiers[j][0];
-                console.log("\t\|----Soldier with NFT ID %d", currentSoldierId);
-                if (j == soldiers.length - 1) {
-                    console.log("");
-                }
-            }
-        }
-        return "";
-    }
-
-    // Pretty print of Kingdom with ID 1
-    await printKingdom(1);
 
 }
 
