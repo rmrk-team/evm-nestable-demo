@@ -5,7 +5,7 @@
     "hardhat": "^2.12.2"
   },
   "dependencies": {
-    "@rmrk-team/evm-contracts": "^0.17.0"
+    "@rmrk-team/evm-contracts": "^0.19.0"
   },
   "scripts": {
     "kingdom": "hardhat run scripts/kingdomUserJourney.ts"

@@ -111,20 +111,20 @@ async function main() {
         tx.wait();
     }
     console.log("The king %s of the second Kingdom has accepted %d armies!", KING_TWO.address, SECOND_KINGDOM_ARMIES);
-
     // Mint soldiers
     await soldierSCInstance.connect(WIZARD).mint(WIZARD.address, MAX_SOLDIER_TOKENS, { value: pricePerSoldier.mul(MAX_SOLDIER_TOKENS) });
 
     // Distribution of soldiers between the 5 armies
     const soldiersDistribution = [10, 20, 30, 14, 16];
-    var soldierIdToMint = 1;
+    var soldierIdToAdd = 1;
 
     // Assign each soldier to his army
     for (let i = 0; i < soldiersDistribution.length; i++) {
         const toMint = soldiersDistribution[i];
+        const ARMY_ID = i+1;
         for (let j = 0; j < toMint; j++) {
-            await soldierSCInstance.nestTransfer(armySCInstance.address, soldierIdToMint, i + 1);
-            soldierIdToMint++;
+            await soldierSCInstance.connect(WIZARD).nestTransferFrom(WIZARD.address, armySCInstance.address, soldierIdToAdd, ARMY_ID, []);
+            soldierIdToAdd++;
         }
     }
 

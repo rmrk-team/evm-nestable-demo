@@ -75,7 +75,7 @@ It is better to repair to this problem a soon as possible and then **fill** the 
     for (let i = 0; i < soldiersDistribution.length; i++) {
         const toMint = soldiersDistribution[i];
         for (let j = 0; j < toMint; j++) {
-            await soldierSCInstance.nestTransfer(armySCInstance.address, soldierIdToMint, i + 1);
+            await soldierSCInstance.connect(WIZARD).nestTransferFrom(WIZARD.address, armySCInstance.address, soldierIdToAdd, ARMY_ID, []);
             soldierIdToMint++;
         }
     }
