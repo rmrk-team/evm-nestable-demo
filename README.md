@@ -45,6 +45,8 @@ let secondtKingdomCreationTx = await kingdomSCInstance.mint(
 await secondtKingdomCreationTx.wait()
 ```
 
+![alt text](images/Nestable_demo_hierarchy_creation.png)
+
 After that the Wizard decided to create the armies and did it by making them appear **directly** in the respectively kingdoms.
 
 ```typescript
@@ -66,6 +68,7 @@ let secondArmyTx = await armySCInstance.nestMint(   // mint directly into parent
 )
 await secondArmyTx.wait()
 ```
+![alt text](images/Nestable_demo_hierarchy_creation_2.png)
 
 But the a gift can't be **accepted** without the permission of the receiver so after that the armies were distributed the kings controlled them and accepted to guide the armies with honor and respect.
 
@@ -81,6 +84,7 @@ for (let i = FIRST_KINGDOM_ARMIES - 1; i >= 0; i--) {
     )
   tx.wait()
 }
+
 for (let i = SECOND_KINGDOM_ARMIES - 1; i >= 0; i--) {
   let tx = await kingdomSCInstance
     .connect(KING_TWO)          // Assure that King Two is the transaction signer
@@ -93,6 +97,7 @@ for (let i = SECOND_KINGDOM_ARMIES - 1; i >= 0; i--) {
   tx.wait()
 }
 ```
+![alt text](images/Nestable_demo_hierarchy_creation_3.png)
 
 Wait a moment... these armies are **empty**! The Wizard created them but he forgot to add the soldiers... :sweat_smile:
 It is better to repair to this problem a soon as possible and then **fill** the armies!
@@ -107,7 +112,10 @@ await soldierSCInstance
 
 const soldiersDistribution = [10, 20, 30, 14, 16]
 var soldierIdToMint = 1
+```
+![alt text](images/Nestable_demo_hierarchy_creation_4.png)
 
+```typescript
 // Assign each soldier to his army
 for (let i = 0; i < soldiersDistribution.length; i++) {
   const toMint = soldiersDistribution[i]
@@ -152,6 +160,8 @@ for (let j = 0; j < armiesComposition.length; j++) {
 }
 ```
 
+![alt text](images/Nestable_demo_hierarchy_creation_5.png)
+
 Finally each Kingdom is complete!
 The Wizard can now relax and retire in some quite place to think about the next game :sunglasses:
 
@@ -168,6 +178,7 @@ console.log("Bigger army soldiers amount now: %d", bigArmy.length)
 const smallerArmy = await armySCInstance.childrenOf(smallerArmyId)
 console.log("Smaller army soldiers amount now: %d", smallerArmy.length)
 ```
+![alt text](images/Nestable_demo_hierarchy_transfer_0.png)
 
 So he decided to re-balance a little the 2 armies by removing 5 soldiers from the first one and assigning these soldiers to the third.
 
@@ -195,6 +206,7 @@ for (let i = 0; i < 5; i++) {
     )
 }
 ```
+![alt text](images/Nestable_demo_hierarchy_transfer_1.png)
 
 Integrate in a new team has always some difficulty, but after proving their value the new soldiers have been accepted and they became part of the group, the third army.
 
@@ -213,6 +225,8 @@ for (let i = 0; i < 5; i++) {
 }
 ```
 
+![alt text](images/Nestable_demo_hierarchy_transfer_2.png)
+
 Good job, now the armies look more balanced! :blush:
 
 ## The Black Death - Burn NFTs at different hierarchy levels
@@ -220,6 +234,8 @@ Good job, now the armies look more balanced! :blush:
 It has been a florid period since the 2 kings have put to govern their kingdoms, but as we already know nothig goes right forever.
 It was the year 1346 when a soldier, just came back from an exploration mission, died becasue of the bubonic plague :skull:
 After seeing the body of the unlucky man (still alive) the King One decided to **move it away** from the second army and take him to the palace in order to observe the problem closer and try to find a solution.
+
+![alt text](images/Nestable_demo_hierarchy_burn_1.png)
 
 ```typescript
 const secondArmyId = 2
@@ -241,6 +257,7 @@ await armySCInstance
     []                              // additional transaction data
   )
 ```
+![alt text](images/Nestable_demo_hierarchy_burn_2.png)
 
 Several days passed and the situation didn't get better and finally, after 2 weeks of pain, the soldier died.
 The King One immediately decided to burn the body to limit the infection...
@@ -250,6 +267,7 @@ await soldierSCInstance
   .connect(KING_ONE)                            // make King One the transaction signer 
   ["burn(uint256)"](secondArmyLastSoldierId)    // ID of the token to burn 
 ```
+![alt text](images/Nestable_demo_hierarchy_burn_3.png)
 
 But this wasn't enough. The infection has already spreaded inside the second army involving.
 A decision needs to be taken.
@@ -270,6 +288,7 @@ await kingdomSCInstance
     []                          // additional transaction data
   )
 ```
+![alt text](images/Nestable_demo_hierarchy_burn_4.png)
 
 The entire army died after a month and the King burned every man and object to prevent the plague to come back again and do other damages to the kingdom.
 
@@ -281,6 +300,7 @@ await armySCInstance
   ["burn(uint256,uint256)"](secondArmyId,   // ID of the token to burn
    secondArmySoldiers.length)               // number of children to burn
 ```
+![alt text](images/Nestable_demo_hierarchy_burn_5.png)
 
 Sometimes do the right this is not easy, but the King One was wise and he contained the infection saving the rest of its kingdom.
 
@@ -294,7 +314,6 @@ In this tutorial we have seen how to interact with the Nestable implementation i
 
 ## Bugs, doubts and help :pray:
 
-For clarifications, bug reporting or help needed please refer to one of these channels:
+For clarifications, bug reporting or help needed please open a Github issue or write a message in the telegram:
 
 - **Telegram**: https://t.me/rmrkimpl
-- **Mail**: dev.andreavendrame@gmail.com
