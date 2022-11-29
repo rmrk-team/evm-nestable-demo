@@ -38,9 +38,9 @@ let firstKingdomCreationTx = await kingdomSCInstance.mint(KING_ONE.address, 1, {
 })
 await firstKingdomCreationTx.wait()
 let secondtKingdomCreationTx = await kingdomSCInstance.mint(
-  KING_TWO.address,
-  1,
-  { value: pricePerKingdom }
+  KING_TWO.address, // receiver address
+  1, // tokens to mint
+  { value: pricePerKingdom } // total minting price
 )
 await secondtKingdomCreationTx.wait()
 ```
@@ -51,18 +51,18 @@ After that the Wizard decided to create the armies and did it by making them app
 const FIRST_KINGDOM_ARMIES = 3
 const SECOND_KINGDOM_ARMIES = 2
 
-let firstArmyTx = await armySCInstance.nestMint(
-  kingdomSCInstance.address,
-  FIRST_KINGDOM_ARMIES,
-  FIRST_KINGDOM_ID,
-  { value: pricePerArmy.mul(FIRST_KINGDOM_ARMIES) }
+let firstArmyTx = await armySCInstance.nestMint(    // mint directly into parent NFT
+  kingdomSCInstance.address,    // destination NFT contract address
+  FIRST_KINGDOM_ARMIES,         // tokens to mint
+  FIRST_KINGDOM_ID,             // parent token ID
+  { value: pricePerArmy.mul(FIRST_KINGDOM_ARMIES) } // total minting price
 )
 await firstArmyTx.wait()
-let secondArmyTx = await armySCInstance.nestMint(
-  kingdomSCInstance.address,
-  SECOND_KINGDOM_ARMIES,
-  SECOND_KINGDOM_ID,
-  { value: pricePerArmy.mul(SECOND_KINGDOM_ARMIES) }
+let secondArmyTx = await armySCInstance.nestMint(   // mint directly into parent NFT
+  kingdomSCInstance.address,    // destination NFT contract address
+  SECOND_KINGDOM_ARMIES,        // tokens to mint
+  SECOND_KINGDOM_ID,            // parent token ID
+  { value: pricePerArmy.mul(SECOND_KINGDOM_ARMIES) }    // total minting price
 )
 await secondArmyTx.wait()
 ```
@@ -72,23 +72,23 @@ But the a gift can't be **accepted** without the permission of the receiver so a
 ```typescript
 for (let i = FIRST_KINGDOM_ARMIES - 1; i >= 0; i--) {
   let tx = await kingdomSCInstance
-    .connect(KING_ONE)
-    .acceptChild(
-      FIRST_KINGDOM_ID,
-      i,
-      armySCInstance.address,
-      firstPendingArmies[i][0]
+    .connect(KING_ONE)          // Assure that King One is the transaction signer
+    .acceptChild(               // Move child from pending array to active array
+      FIRST_KINGDOM_ID,         // ID of the parent token that will receive the child
+      i,                        // index of the child ing the pending children array
+      armySCInstance.address,   // parent token smart contract address
+      firstPendingArmies[i][0]  // child token ID
     )
   tx.wait()
 }
 for (let i = SECOND_KINGDOM_ARMIES - 1; i >= 0; i--) {
   let tx = await kingdomSCInstance
-    .connect(KING_TWO)
-    .acceptChild(
-      SECOND_KINGDOM_ID,
-      i,
-      armySCInstance.address,
-      secondPendingArmies[i][0]
+    .connect(KING_TWO)          // Assure that King Two is the transaction signer
+    .acceptChild(               // Move child from pending array to active array
+      SECOND_KINGDOM_ID,        // ID of the parent token that will receive the child
+      i,                        // index of the child ing the pending children array
+      armySCInstance.address,   // parent token smart contract address
+      secondPendingArmies[i][0] // child token ID
     )
   tx.wait()
 }
@@ -101,9 +101,9 @@ It is better to repair to this problem a soon as possible and then **fill** the 
 // Mint soldiers
 await soldierSCInstance
   .connect(WIZARD)
-  .mint(WIZARD.address, MAX_SOLDIER_TOKENS, {
-    value: pricePerSoldier.mul(MAX_SOLDIER_TOKENS),
-  })
+  .mint(WIZARD.address,     // minter address
+    MAX_SOLDIER_TOKENS,     // number of tokens to mint    
+    { value: pricePerSoldier.mul(MAX_SOLDIER_TOKENS) }) // total minting price
 
 const soldiersDistribution = [10, 20, 30, 14, 16]
 var soldierIdToMint = 1
@@ -115,12 +115,12 @@ for (let i = 0; i < soldiersDistribution.length; i++) {
   for (let j = 0; j < toMint; j++) {
     await soldierSCInstance
       .connect(WIZARD)
-      .nestTransferFrom(
-        WIZARD.address,
-        armySCInstance.address,
-        soldierIdToAdd,
-        armyId,
-        []
+      .nestTransferFrom(        // transfer token (child) directly into a new parent
+        WIZARD.address,         // child owner from which transfer the token
+        armySCInstance.address, // parent smart contract address
+        soldierIdToAdd,         // child token ID
+        armyId,                 // parent token ID
+        []                      // additional data for the transaction
       )
     soldierIdToAdd++
   }
@@ -131,21 +131,21 @@ for (let j = 0; j < armiesComposition.length; j++) {
   for (let i = soldiersDistribution[j] - 1; i >= 0; i--) {
     if (j < 3) {
       await armySCInstance
-        .connect(KING_ONE)
-        .acceptChild(
-          j + 1,
-          i,
-          soldierSCInstance.address,
-          armiesComposition[j][i][0]
+        .connect(KING_ONE)              // make King One the transaction signer 
+        .acceptChild(                   // Move child from pending array to active array
+          j + 1,                        // ID of the parent token that will receive the child
+          i,                            // index of the child ing the pending children array
+          soldierSCInstance.address,    // parent token smart contract address
+          armiesComposition[j][i][0]    // child token ID
         )
     } else {
       await armySCInstance
-        .connect(KING_TWO)
-        .acceptChild(
-          j + 1,
-          i,
-          soldierSCInstance.address,
-          armiesComposition[j][i][0]
+        .connect(KING_TWO)              // make King Two the transaction signer 
+        .acceptChild(                   // Move child from pending array to active array
+          j + 1,                        // ID of the parent token that will receive the child
+          i,                            // index of the child ing the pending children array
+          soldierSCInstance.address,    // parent token smart contract address
+          armiesComposition[j][i][0]    // child token ID
         )
     }
   }
@@ -177,21 +177,21 @@ for (let i = 0; i < 5; i++) {
   let soldierToRemoveId = bigArmy[soldierToRemoveIndex][0]
   console.log(
     "Removing from %d army the soldier with ID %s...",
-    biggerArmyId,
-    soldierToRemoveId
+    biggerArmyId,       // ID of the parent token from which remove the child
+    soldierToRemoveId   // Child token ID to remove
   )
 
   await armySCInstance
-    .connect(KING_ONE)
-    .transferChild(
-      biggerArmyId,
-      armySCInstance.address,
-      smallerArmyId,
-      soldierToRemoveIndex,
-      soldierSCInstance.address,
-      soldierToRemoveId,
-      false,
-      []
+    .connect(KING_ONE)          // make King One the transaction signer 
+    .transferChild(             // transfer child token away from its parent
+      biggerArmyId,             // ID of the parent token that actually owns the child
+      armySCInstance.address,   // parent token smart contract address
+      smallerArmyId,            // parent token ID
+      soldierToRemoveIndex,     // position of the child token in active children array
+      soldierSCInstance.address,    // child token smart contract address
+      soldierToRemoveId,        // ID of the child token to transfer
+      false,                    // is child token in the pending children array
+      []                        // additional transaction data
     )
 }
 ```
@@ -203,12 +203,12 @@ for (let i = 0; i < 5; i++) {
   let soldierToAddIndex = pendingSoldiers.length - 1 - i // we procede from last one back to the first one
   let soldierToAddId = pendingSoldiers[soldierToAddIndex][0]
   await armySCInstance
-    .connect(KING_ONE)
-    .acceptChild(
-      smallerArmyId,
-      soldierToAddIndex,
-      soldierSCInstance.address,
-      soldierToAddId
+    .connect(KING_ONE)              // make King One the transaction signer 
+    .acceptChild(                   // Move child from pending array to active array
+      smallerArmyId,                // ID of the parent token that will receive the child
+      soldierToAddIndex,            // index of the child ing the pending children array
+      soldierSCInstance.address,    // parent token smart contract address
+      soldierToAddId                // child token ID
     )
 }
 ```
@@ -229,16 +229,16 @@ let secondArmyLastSoldierId =
   secondArmySoldiers[secondArmySoldiers.length - 1][0]
 
 await armySCInstance
-  .connect(KING_ONE)
-  .transferChild(
-    secondArmyId,
-    KING_ONE.address,
-    0,
-    secondArmyLastSoldierIndex,
-    soldierSCInstance.address,
-    secondArmyLastSoldierId,
-    false,
-    []
+  .connect(KING_ONE)                // make King One the transaction signer 
+  .transferChild(                   // transfer child token away from its parent
+    secondArmyId,                   // ID of the parent token that actually owns the child 
+    KING_ONE.address,               // address of the future token (child) owner
+    0,                              // 0 because the future owner will not be another NFT
+    secondArmyLastSoldierIndex,     // index of the child token in the active children array
+    soldierSCInstance.address,      // child token smart contract address
+    secondArmyLastSoldierId,        // ID of the child token to transfer
+    false,                          // is child token in the pending children array
+    []                              // additional transaction data
   )
 ```
 
@@ -247,8 +247,8 @@ The King One immediately decided to burn the body to limit the infection...
 
 ```typescript
 await soldierSCInstance
-  .connect(KING_ONE)
-  ["burn(uint256)"](secondArmyLastSoldierId)
+  .connect(KING_ONE)                            // make King One the transaction signer 
+  ["burn(uint256)"](secondArmyLastSoldierId)    // ID of the token to burn 
 ```
 
 But this wasn't enough. The infection has already spreaded inside the second army involving.
@@ -258,16 +258,16 @@ The sad king decided to push the entire army away in an isolated place inside th
 ```typescript
 const secondArmyIndex = 1 // index of the second army in the children list of the first kingdom
 await kingdomSCInstance
-  .connect(KING_ONE)
-  .transferChild(
-    FIRST_KINGDOM_ID,
-    KING_ONE.address,
-    0,
-    secondArmyIndex,
-    armySCInstance.address,
-    secondArmyId,
-    false,
-    []
+  .connect(KING_ONE)            // make King One the transaction signer 
+  .transferChild(               // transfer child token away from its parent
+    FIRST_KINGDOM_ID,           // ID of the parent token that actually owns the child 
+    KING_ONE.address,           // address of the future token (child) owner
+    0,                          // 0 because the future owner will not be another NFT
+    secondArmyIndex,            // index of the child token in the active children array
+    armySCInstance.address,     // child token smart contract address
+    secondArmyId,               // ID of the child token to transfer
+    false,                      // is child token in the pending children array
+    []                          // additional transaction data
   )
 ```
 
@@ -277,8 +277,9 @@ The entire army died after a month and the King burned every man and object to p
 secondArmySoldiers = await armySCInstance.childrenOf(secondArmyId)
 // Burn recursively the army and its the children
 await armySCInstance
-  .connect(KING_ONE)
-  ["burn(uint256,uint256)"](secondArmyId, secondArmySoldiers.length)
+  .connect(KING_ONE)                        // make King One the transaction signer 
+  ["burn(uint256,uint256)"](secondArmyId,   // ID of the token to burn
+   secondArmySoldiers.length)               // number of children to burn
 ```
 
 Sometimes do the right this is not easy, but the King One was wise and he contained the infection saving the rest of its kingdom.
@@ -295,7 +296,5 @@ In this tutorial we have seen how to interact with the Nestable implementation i
 
 For clarifications, bug reporting or help needed please refer to one of these channels:
 
+- **Telegram**: https://t.me/rmrkimpl
 - **Mail**: dev.andreavendrame@gmail.com
-- **Discord**: superrisk#5988
-- **Twitter**: @vendrame_and
-- **Github**: dev-andreavendrame
