@@ -8,12 +8,12 @@ In this journey we will explore the main features of the [Nestable RMRK](https:/
 ##### The use cases that will be explored are:
 
 - **Creation** of a multi-level NFTs hierarchy;
-- **Transfer** of NFTs between hierarchy ownere and/or hierarchy levels;
+- **Transfer** of NFTs between hierarchy owners and/or hierarchy levels;
 - **Burn** NFTs at different hierarchy levels.
 
 ## User journey context
 
-To better understand the different use cases of this standard we will transform them in situation where the dynamics are clear because we are already familiar with them, but every action will be performed with smart contract functions with the help of some _Typescript_ code :muscle:
+To better understand the different use cases of this standard we will transform them in situation where the dynamics are clear because we are already familiar with them, but every action will be performed with smart contract functions with the help of some _Typescript_ code. :muscle:
 
 _We are in the Medieval epoch and in the universe there is a Wizard who can do whatever he wants._
 _During a special day the wizard decided to give life to 2 kings, each one with his own Kingdom and then he allowed the kings to model their kingdoms._
@@ -163,7 +163,7 @@ for (let j = 0; j < armiesComposition.length; j++) {
 ![alt text](images/Nestable_demo_hierarchy_creation_5.png)
 
 Finally each Kingdom is complete!
-The Wizard can now relax and retire in some quite place to think about the next game :sunglasses:
+The Wizard can now relax and retire in some quiet place to think about the next game. :sunglasses:
 
 ## Armies balancing - Transfer NFTs inside and outside the hierarchy
 
@@ -231,8 +231,8 @@ Good job, now the armies look more balanced! :blush:
 
 ## The Black Death - Burn NFTs at different hierarchy levels
 
-It has been a florid period since the 2 kings have put to govern their kingdoms, but as we already know nothig goes right forever.
-It was the year 1346 when a soldier, just came back from an exploration mission, died becasue of the bubonic plague :skull:
+It has been a florid period since the 2 kings have put to govern their kingdoms, but as we already know nothing goes right forever.
+It was the year 1346 when a soldier, just came back from an exploration mission, died because of the bubonic plague. :skull:
 After seeing the body of the unlucky man (still alive) the King One decided to **move it away** from the second army and take him to the palace in order to observe the problem closer and try to find a solution.
 
 ![alt text](images/Nestable_demo_hierarchy_burn_1.png)
@@ -269,7 +269,7 @@ await soldierSCInstance
 ```
 ![alt text](images/Nestable_demo_hierarchy_burn_3.png)
 
-But this wasn't enough. The infection has already spreaded inside the second army involving.
+But this wasn't enough. The infection has already spread inside the second army involving.
 A decision needs to be taken.
 The sad king decided to push the entire army away in an isolated place inside the kingdom, with every object and thing related to it, and this was a wise choice.
 
