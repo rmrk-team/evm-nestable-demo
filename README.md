@@ -2,8 +2,8 @@
 
 ### A contextualized user journey to explore and understand the Nestable NFT features
 
-Nestable is a Solidity smart contract implementation by [RMRK Team](https://github.com/rmrk-team) that allows an NFT to own another NFT.
-In this journey we will explore the main features of the [Nestable RMRK](https://github.com/rmrk-team/evm/blob/master/contracts/implementations/RMRKNestableImpl.sol).
+Nestable is a Solidity smart contract implementation by [RMRK Team](https://github.com/rmrk-team) that allows NFTs to own other NFTs.
+In this journey we will explore the main features of the [RMRK Nestable](https://github.com/rmrk-team/evm/blob/master/contracts/implementations/RMRKNestableImpl.sol).
 
 ##### The use cases that will be explored are:
 
@@ -13,21 +13,21 @@ In this journey we will explore the main features of the [Nestable RMRK](https:/
 
 ## User journey context
 
-To better understand the different use cases of this standard we will transform them in situation where the dynamics are clear because we are already familiar with them, but every action will be performed with smart contract functions with the help of some _Typescript_ code. :muscle:
+To better understand the different use cases of this standard we will observe them in situations where the context is clear, because we are already familiar with them. Every action will be performed using smart contract functions with the help of some _Typescript_ code. :muscle:
 
-_We are in the Medieval epoch and in the universe there is a Wizard who can do whatever he wants._
-_During a special day the wizard decided to give life to 2 kings, each one with his own Kingdom and then he allowed the kings to model their kingdoms._
-_What happened after is discoverable following the user journey, so have fun and happy learning!_
+_We are in the Medieval epoch and in the universe there is an omnipotent and all-powerful Wizard._
+_During a special day, the wizard decided to create two kings, each one with their own Kingdom and then he allowed the kings to govern their kingdoms._
+_Every action that unfolded later is included in the user journey. Have fun and happy learning!_
 
 ### The Kingdoms genesis - Multi-level hierarchy creation
 
-The day 0 the Wizard decided that the universe will be structured in this way:
+The Wizard decided that the universe will be structured in this way:
 
-- 2 Kingdom, each one with 1 king
-- 5 Armies: 3 for the first kingdom and 2 for the other one
+- 2 Kingdoms; each with a single king
+- 5 Armies: 3 for the first kingdom and 2 for the second one
 - 90 Soldiers: distributed between the 5 armies, but not in equal parts.
 
-The first move was so to create the 2 kingdoms and give them to their owners, the Kingdom 1 to the **King One** (very original name :satisfied:) and the Kingdom 2 to the **King Two**.
+The first action was to create the two kingdoms and give them to their owners. The Kingdom 1 to the **King One** (very original name :satisfied:) and the Kingdom 2 to the **King Two**.
 
 ```typescript
 const FIRST_KINGDOM_ID = 1
@@ -47,7 +47,7 @@ await secondtKingdomCreationTx.wait()
 
 ![alt text](images/Nestable_demo_hierarchy_creation.png)
 
-After that the Wizard decided to create the armies and did it by making them appear **directly** in the respectively kingdoms.
+After that, the Wizard decided to create the armies and did it by making them appear **directly** in their respective kingdoms.
 
 ```typescript
 const FIRST_KINGDOM_ARMIES = 3
@@ -70,7 +70,7 @@ await secondArmyTx.wait()
 ```
 ![alt text](images/Nestable_demo_hierarchy_creation_2.png)
 
-But the a gift can't be **accepted** without the permission of the receiver so after that the armies were distributed the kings controlled them and accepted to guide the armies with honor and respect.
+But the a gift can't be **granted** without **acceptance** of the receiver, so after the armies were distributed to their respective kingdoms, the kings controlling them accepted the armies and vowed to guide them with honor and respect.
 
 ```typescript
 for (let i = FIRST_KINGDOM_ARMIES - 1; i >= 0; i--) {
@@ -99,8 +99,8 @@ for (let i = SECOND_KINGDOM_ARMIES - 1; i >= 0; i--) {
 ```
 ![alt text](images/Nestable_demo_hierarchy_creation_3.png)
 
-Wait a moment... these armies are **empty**! The Wizard created them but he forgot to add the soldiers... :sweat_smile:
-It is better to repair to this problem a soon as possible and then **fill** the armies!
+Wait a moment... these armies are **empty**! The Wizard created them, but forgot to add the soldiers... :sweat_smile:
+It is better to repair this problem a soon as possible and **fill** the armies!
 
 ```typescript
 // Mint soldiers
@@ -163,12 +163,12 @@ for (let j = 0; j < armiesComposition.length; j++) {
 ![alt text](images/Nestable_demo_hierarchy_creation_5.png)
 
 Finally each Kingdom is complete!
-The Wizard can now relax and retire in some quiet place to think about the next game. :sunglasses:
+The Wizard can now relax and retire to a quiet place to think about the next game. :sunglasses:
 
 ## Armies balancing - Transfer NFTs inside and outside the hierarchy
 
-The 2 Kingdoms have been created and set up, but the King One isn't happy. He noticed that he has 3 armies, but very _unbalanced_.
-In particular he noticed that there is a big difference between the first and the third army (with respectively 30 and 10 soldiers each).
+The two Kingdoms have been created and populated, but the King One isn't happy. He noticed that he has 3 armies, but they are grossly _imbalanced_.
+In particular he noticed that there is a big difference between the first and the third army (which contain 30 and 10 soldiers respectively).
 
 ```typescript
 const biggerArmyId = 3
@@ -180,7 +180,7 @@ console.log("Smaller army soldiers amount now: %d", smallerArmy.length)
 ```
 ![alt text](images/Nestable_demo_hierarchy_transfer_0.png)
 
-So he decided to re-balance a little the 2 armies by removing 5 soldiers from the first one and assigning these soldiers to the third.
+So he decided to re-balance these armies a bit. He did so by removing 5 soldiers from the first one and assigning them soldiers to the third one.
 
 ```typescript
 for (let i = 0; i < 5; i++) {
@@ -208,7 +208,7 @@ for (let i = 0; i < 5; i++) {
 ```
 ![alt text](images/Nestable_demo_hierarchy_transfer_1.png)
 
-Integrate in a new team has always some difficulty, but after proving their value the new soldiers have been accepted and they became part of the group, the third army.
+Integrating a new team always has its difficulties, but after proving their worth, the new soldiers have been accepted and became part of the third army.
 
 ```typescript
 for (let i = 0; i < 5; i++) {
@@ -231,9 +231,9 @@ Good job, now the armies look more balanced! :blush:
 
 ## The Black Death - Burn NFTs at different hierarchy levels
 
-It has been a florid period since the 2 kings have put to govern their kingdoms, but as we already know nothing goes right forever.
-It was the year 1346 when a soldier, just came back from an exploration mission, died because of the bubonic plague. :skull:
-After seeing the body of the unlucky man (still alive) the King One decided to **move it away** from the second army and take him to the palace in order to observe the problem closer and try to find a solution.
+It has been a prosperous period since the two kings have been erected to govern their kingdoms, but as always, prosperity doesn't last forever.
+It was the year 1346 when a soldier, that just came back from an exploration mission, had contracted a mysterious illness. :skull:
+After seeing the state of the unlucky man the King One decided to **move it away** from the second army and take him to the palace in order to observe the illness and try to find a cure.
 
 ![alt text](images/Nestable_demo_hierarchy_burn_1.png)
 
@@ -259,8 +259,8 @@ await armySCInstance
 ```
 ![alt text](images/Nestable_demo_hierarchy_burn_2.png)
 
-Several days passed and the situation didn't get better and finally, after 2 weeks of pain, the soldier died.
-The King One immediately decided to burn the body to limit the infection...
+Several days passed and the soldier's health didn't get any better and finally, after 2 weeks of suffering, the soldier died.
+The King One immediately decided to burn the body to contain the infection...
 
 ```typescript
 await soldierSCInstance
@@ -269,9 +269,9 @@ await soldierSCInstance
 ```
 ![alt text](images/Nestable_demo_hierarchy_burn_3.png)
 
-But this wasn't enough. The infection has already spread inside the second army involving.
-A decision needs to be taken.
-The sad king decided to push the entire army away in an isolated place inside the kingdom, with every object and thing related to it, and this was a wise choice.
+But this wasn't enough. The infection has already spread throughout the second army.
+A decision had to be made.
+The sad king decided to push the entire army away to an isolated place within the kingdom, including every object and thing related to it, and this was a wise choice.
 
 ```typescript
 const secondArmyIndex = 1 // index of the second army in the children list of the first kingdom
@@ -290,7 +290,7 @@ await kingdomSCInstance
 ```
 ![alt text](images/Nestable_demo_hierarchy_burn_4.png)
 
-The entire army died after a month and the King burned every man and object to prevent the plague to come back again and do other damages to the kingdom.
+The entire army died inside a month and the King burned every man and object to prevent the plague to resurface and do more damage to the kingdom.
 
 ```typescript
 secondArmySoldiers = await armySCInstance.childrenOf(secondArmyId)
@@ -302,13 +302,13 @@ await armySCInstance
 ```
 ![alt text](images/Nestable_demo_hierarchy_burn_5.png)
 
-Sometimes do the right this is not easy, but the King One was wise and he contained the infection saving the rest of its kingdom.
+Sometimes doing the right this is not easy, but the King One was wise and he contained the infection, saving the rest of its kingdom.
 
 ## User journey summary
 
 In this tutorial we have seen how to interact with the Nestable implementation in order to:
 
-1. :point_right: **Create** multi-level hierarchies with the kingdoms and their composition;
+1. :point_right: **Create** multi-level hierarchies using the kingdoms and their composition;
 2. :point_right: **Transfer** NFTs between different parts of the hierarchy and also how to remove them (soldiers movements between the first and the third army);
 3. :point_right: **Burn** NFTs at the lowest level of a hierarchy (the first soldier affected by the Black Death) and entire sub-hierarchies (like the second army after the infection).
 
