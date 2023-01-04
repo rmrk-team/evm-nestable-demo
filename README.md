@@ -168,7 +168,7 @@ The Wizard can now relax and retire to a quiet place to think about the next gam
 ## Armies balancing - Transfer NFTs inside and outside the hierarchy
 
 The two Kingdoms have been created and populated, but the King One isn't happy. He noticed that he has 3 armies, but they are grossly _imbalanced_.
-In particular he noticed that there is a big difference between the first and the third army (which contain 30 and 10 soldiers respecitely).
+In particular he noticed that there is a big difference between the first and the third army (which contain 30 and 10 soldiers respectively).
 
 ```typescript
 const biggerArmyId = 3
