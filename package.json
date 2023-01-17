@@ -1,5 +1,6 @@
 {
-  "name": "nested-evm-demo",
+  "name": "nestable-evm-demo",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.0",
     "hardhat": "^2.12.2"
