@@ -45,7 +45,11 @@ let secondtKingdomCreationTx = await kingdomSCInstance.mint(
 await secondtKingdomCreationTx.wait()
 ```
 
-![alt text](images/Nestable_demo_hierarchy_creation.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/dark_theme/hierarchy_creation_0.png">
+  <source media="(prefers-color-scheme: light)" srcset="images/light_theme/hierarchy_creation_0.png">
+  <img alt="hierarchy_creation_0" src="images/light_theme/hierarchy_creation_0.png">
+</picture>
 
 After that, the Wizard decided to create the armies and did it by making them appear **directly** in their respective kingdoms.
 
