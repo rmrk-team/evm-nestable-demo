@@ -44,10 +44,9 @@ let secondtKingdomCreationTx = await kingdomSCInstance.mint(
 )
 await secondtKingdomCreationTx.wait()
 ```
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="images/dark_theme/hierarchy_creation_0.png">
-  <source media="(prefers-color-scheme: light)" srcset="images/light_theme/hierarchy_creation_0.png">
+  <source media="(prefers-color-scheme: dark)" srcset="images/light_theme/hierarchy_creation_0.png">
   <img alt="hierarchy_creation_0" src="images/light_theme/hierarchy_creation_0.png">
 </picture>
 
@@ -72,7 +71,11 @@ let secondArmyTx = await armySCInstance.nestMint(   // mint directly into parent
 )
 await secondArmyTx.wait()
 ```
-![alt text](images/Nestable_demo_hierarchy_creation_2.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/dark_theme/hierarchy_creation_1.png">
+  <source media="(prefers-color-scheme: dark)" srcset="images/light_theme/hierarchy_creation_1.png">
+  <img alt="hierarchy_creation_1" src="images/light_theme/hierarchy_creation_1.png">
+</picture>
 
 But the a gift can't be **granted** without **acceptance** of the receiver, so after the armies were distributed to their respective kingdoms, the kings controlling them accepted the armies and vowed to guide them with honor and respect.
 
@@ -101,7 +104,11 @@ for (let i = SECOND_KINGDOM_ARMIES - 1; i >= 0; i--) {
   tx.wait()
 }
 ```
-![alt text](images/Nestable_demo_hierarchy_creation_3.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/dark_theme/hierarchy_creation_2.png">
+  <source media="(prefers-color-scheme: dark)" srcset="images/light_theme/hierarchy_creation_2.png">
+  <img alt="hierarchy_creation_2" src="images/light_theme/hierarchy_creation_2.png">
+</picture>
 
 Wait a moment... these armies are **empty**! The Wizard created them, but forgot to add the soldiers... :sweat_smile:
 It is better to repair this problem a soon as possible and **fill** the armies!
@@ -117,7 +124,11 @@ await soldierSCInstance
 const soldiersDistribution = [10, 20, 30, 14, 16]
 var soldierIdToMint = 1
 ```
-![alt text](images/Nestable_demo_hierarchy_creation_4.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/dark_theme/hierarchy_creation_3.png">
+  <source media="(prefers-color-scheme: dark)" srcset="images/light_theme/hierarchy_creation_3.png">
+  <img alt="hierarchy_creation_3" src="images/light_theme/hierarchy_creation_3.png">
+</picture>
 
 ```typescript
 // Assign each soldier to his army
@@ -163,8 +174,11 @@ for (let j = 0; j < armiesComposition.length; j++) {
   }
 }
 ```
-
-![alt text](images/Nestable_demo_hierarchy_creation_5.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/dark_theme/hierarchy_creation_4.png">
+  <source media="(prefers-color-scheme: dark)" srcset="images/light_theme/hierarchy_creation_4.png">
+  <img alt="hierarchy_creation_4" src="images/light_theme/hierarchy_creation_4.png">
+</picture>
 
 Finally each Kingdom is complete!
 The Wizard can now relax and retire to a quiet place to think about the next game. :sunglasses:
@@ -182,7 +196,11 @@ console.log("Bigger army soldiers amount now: %d", bigArmy.length)
 const smallerArmy = await armySCInstance.childrenOf(smallerArmyId)
 console.log("Smaller army soldiers amount now: %d", smallerArmy.length)
 ```
-![alt text](images/Nestable_demo_hierarchy_transfer_0.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/dark_theme/hierarchy_transfer_0.png">
+  <source media="(prefers-color-scheme: dark)" srcset="images/light_theme/hierarchy_transfer_0.png">
+  <img alt="hierarchy_transfer_0" src="images/light_theme/hierarchy_transfer_0.png">
+</picture>
 
 So he decided to re-balance these armies a bit. He did so by removing 5 soldiers from the first one and assigning them soldiers to the third one.
 
@@ -210,7 +228,11 @@ for (let i = 0; i < 5; i++) {
     )
 }
 ```
-![alt text](images/Nestable_demo_hierarchy_transfer_1.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/dark_theme/hierarchy_transfer_1.png">
+  <source media="(prefers-color-scheme: dark)" srcset="images/light_theme/hierarchy_transfer_1.png">
+  <img alt="hierarchy_transfer_1" src="images/light_theme/hierarchy_transfer_1.png">
+</picture>
 
 Integrating a new team always has its difficulties, but after proving their worth, the new soldiers have been accepted and became part of the third army.
 
@@ -228,8 +250,11 @@ for (let i = 0; i < 5; i++) {
     )
 }
 ```
-
-![alt text](images/Nestable_demo_hierarchy_transfer_2.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/dark_theme/hierarchy_transfer_2.png">
+  <source media="(prefers-color-scheme: dark)" srcset="images/light_theme/hierarchy_transfer_2.png">
+  <img alt="hierarchy_transfer_2" src="images/light_theme/hierarchy_transfer_2.png">
+</picture>
 
 Good job, now the armies look more balanced! :blush:
 
@@ -239,7 +264,11 @@ It has been a prosperous period since the two kings have been erected to govern 
 It was the year 1346 when a soldier, that just came back from an exploration mission, had contracted a mysterious illness. :skull:
 After seeing the state of the unlucky man the King One decided to **move it away** from the second army and take him to the palace in order to observe the illness and try to find a cure.
 
-![alt text](images/Nestable_demo_hierarchy_burn_1.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/dark_theme/hierarchy_burn_0.png">
+  <source media="(prefers-color-scheme: dark)" srcset="images/light_theme/hierarchy_burn_0.png">
+  <img alt="hierarchy_burn_0" src="images/light_theme/hierarchy_burn_0.png">
+</picture>
 
 ```typescript
 const secondArmyId = 2
@@ -261,7 +290,11 @@ await armySCInstance
     []                              // additional transaction data
   )
 ```
-![alt text](images/Nestable_demo_hierarchy_burn_2.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/dark_theme/hierarchy_burn_1.png">
+  <source media="(prefers-color-scheme: dark)" srcset="images/light_theme/hierarchy_burn_1.png">
+  <img alt="hierarchy_burn_1" src="images/light_theme/hierarchy_burn_1.png">
+</picture>
 
 Several days passed and the soldier's health didn't get any better and finally, after 2 weeks of suffering, the soldier died.
 The King One immediately decided to burn the body to contain the infection...
@@ -271,7 +304,11 @@ await soldierSCInstance
   .connect(KING_ONE)                            // make King One the transaction signer 
   ["burn(uint256)"](secondArmyLastSoldierId)    // ID of the token to burn 
 ```
-![alt text](images/Nestable_demo_hierarchy_burn_3.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/dark_theme/hierarchy_burn_2.png">
+  <source media="(prefers-color-scheme: dark)" srcset="images/light_theme/hierarchy_burn_2.png">
+  <img alt="hierarchy_burn_2" src="images/light_theme/hierarchy_burn_2.png">
+</picture>
 
 But this wasn't enough. The infection has already spread throughout the second army.
 A decision had to be made.
@@ -292,7 +329,11 @@ await kingdomSCInstance
     []                          // additional transaction data
   )
 ```
-![alt text](images/Nestable_demo_hierarchy_burn_4.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/dark_theme/hierarchy_burn_3.png">
+  <source media="(prefers-color-scheme: dark)" srcset="images/light_theme/hierarchy_burn_3.png">
+  <img alt="hierarchy_burn_3" src="images/light_theme/hierarchy_burn_3.png">
+</picture>
 
 The entire army died inside a month and the King burned every man and object to prevent the plague to resurface and do more damage to the kingdom.
 
@@ -304,7 +345,11 @@ await armySCInstance
   ["burn(uint256,uint256)"](secondArmyId,   // ID of the token to burn
    secondArmySoldiers.length)               // number of children to burn
 ```
-![alt text](images/Nestable_demo_hierarchy_burn_5.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/dark_theme/hierarchy_burn_4.png">
+  <source media="(prefers-color-scheme: dark)" srcset="images/light_theme/hierarchy_burn_4.png">
+  <img alt="hierarchy_burn_4" src="images/light_theme/hierarchy_burn_4.png">
+</picture>
 
 Sometimes doing the right this is not easy, but the King One was wise and he contained the infection, saving the rest of its kingdom.
 
